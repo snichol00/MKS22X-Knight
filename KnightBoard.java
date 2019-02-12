@@ -1,4 +1,4 @@
-public class KnighBoard{
+public class KnightBoard{
   //@throws IllegalArgumentException when either parameter is negative.
   //Initialize the board to the correct size and make them all 0's
   public KnightBoard(int startingRows,int startingCols){
