@@ -56,6 +56,66 @@ public class KnightBoard{
 
   // level is the # of the knight
   private boolean solveH(int row ,int col, int level){
-
+    // if it reaches last row, then return true because all queens have been placed
+    if (level == board.length * board[0].length){
+      return true;
+    }
+    if (row < board.length - 3){
+      if (col < board[0].length - 1){
+        if (board[row + 2][col + 1] == 0){
+          board[row + 2][col + 1] = -1;
+          return solveH(row + 2, col + 1, level + 1);
+        }
+      }
+      if (col > 0){
+        if (board[row + 2][col - 1] == 0){
+          board[row + 2][col - 1] = -1;
+          return solveH(row + 2, col - 1, level + 1);
+        }
+      }
+    }
+    if (row > 1){
+      if (col < board[0].length - 1){
+        if (board[row - 2][col + 1] == 0){
+          board[row - 2][col + 1] = -1;
+          return solveH(row + 2, col + 1, level + 1);
+        }
+      }
+      if (col > 0){
+        if (board[row - 2][col - 1] == 0){
+          board[row - 2][col - 1] = -1;
+          return solveH(row - 2, col - 1, level + 1);
+        }
+      }
+    }
+    if (col < board.length[0] - 3){
+      if (row < board.length - 1){
+        if (board[row + 1][col + 2] == 0){
+          board[row + 1][col + 2] = -1;
+          return solveH(row + 1, col + 2, level + 1);
+        }
+      }
+      if (col > 0){
+        if (board[row - 1][col + 2] == 0){
+            board[row - 1][col + 2] = -1;
+            return solveH(row - 1, col + 2, level + 1);
+          }
+        }
+      }
+    }
+    if (col > 1){
+      if (row < board.length - 1){
+        if (board[row + 1][col - 2] == 0){
+          board[row + 1][col - 2] = -1;
+          return solveH(row + 1, col - 2, level + 1);
+        }
+      }
+      if (col > 0){
+        if (board[row - 1][col +- 2] == 0){
+          board[row - 1][col - 2] = -1;
+          return solveH(row - 1, col - 2, level + 1);
+        }
+      }
+    }
   }
 }
