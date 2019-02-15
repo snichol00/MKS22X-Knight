@@ -1,5 +1,6 @@
 public class KnightBoard{
   private int[][] board;
+
   //@throws IllegalArgumentException when either parameter is negative.
   //Initialize the board to the correct size and make them all 0's
   public KnightBoard(int startingRows,int startingCols){
@@ -17,9 +18,11 @@ public class KnightBoard{
     String output = "";
     for (int y = 0; y < board.length; y++){
       for (int x = 0; x < board[0].length; x++){
+        //when there is no knight
         if (board[y][x] == 0){
           output += " _";
         }
+        //where there is a knight
         if (board[y][x] == -1){
           output += " K";
         }
@@ -71,10 +74,12 @@ public class KnightBoard{
     if (startingCol < 0 || startingCol >= board[0].length){
       throw new IllegalArgumentException();
     }
+    // calls helper
     return countSolutions(0, 0, 0);
   }
 
   public int countSolutions(int startingRow, int startingCol, int level){
+    //initialize variable
     int count = 0;
     return count;
   }
