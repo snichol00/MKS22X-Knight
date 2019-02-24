@@ -75,7 +75,7 @@ public class KnightBoard{
       throw new IllegalArgumentException();
     }
     // calls helper
-    return countSolutions(0, 0, 0);
+    return countSolutions(startingRow, startingCol, 0);
   }
 
   public int countSolutions(int startingRow, int startingCol, int level){
@@ -87,6 +87,9 @@ public class KnightBoard{
   // level is the # of the knight
   private boolean solveH(int row ,int col, int level){
     // if the # knights is equal to the number of squares on board, all knights have been placed
+    System.out.println(toString());
+    System.out.println("" + row + " " + col);
+    board[row][col] = -1;
     if (level == board.length * board[0].length){
       return true;
     }
@@ -94,13 +97,11 @@ public class KnightBoard{
     if (row < board.length - 3){
       if (col < board[0].length - 1){
         if (board[row + 2][col + 1] == 0){
-          board[row + 2][col + 1] = -1;
           return solveH(row + 2, col + 1, level + 1);
         }
       }
       if (col > 0){
         if (board[row + 2][col - 1] == 0){
-          board[row + 2][col - 1] = -1;
           return solveH(row + 2, col - 1, level + 1);
         }
       }
@@ -109,13 +110,11 @@ public class KnightBoard{
     if (row > 1){
       if (col < board[0].length - 1){
         if (board[row - 2][col + 1] == 0){
-          board[row - 2][col + 1] = -1;
-          return solveH(row + 2, col + 1, level + 1);
+          return solveH(row - 2, col + 1, level + 1);
         }
       }
       if (col > 0){
         if (board[row - 2][col - 1] == 0){
-          board[row - 2][col - 1] = -1;
           return solveH(row - 2, col - 1, level + 1);
         }
       }
@@ -124,13 +123,11 @@ public class KnightBoard{
     if (col < board[0].length - 3){
       if (row < board.length - 1){
         if (board[row + 1][col + 2] == 0){
-          board[row + 1][col + 2] = -1;
           return solveH(row + 1, col + 2, level + 1);
         }
       }
       if (col > 0){
         if (board[row - 1][col + 2] == 0){
-            board[row - 1][col + 2] = -1;
             return solveH(row - 1, col + 2, level + 1);
           }
         }
@@ -139,25 +136,16 @@ public class KnightBoard{
     if (col > 1){
       if (row < board.length - 1){
         if (board[row + 1][col - 2] == 0){
-          board[row + 1][col - 2] = -1;
           return solveH(row + 1, col - 2, level + 1);
         }
       }
       if (col > 0){
-        if (board[row - 1][col +- 2] == 0){
-          board[row - 1][col - 2] = -1;
+        if (board[row - 1][col - 2] == 0){
           return solveH(row - 1, col - 2, level + 1);
         }
       }
     }
     // if none of the possible squares are empty, then next knight can't be placed
     return false;
-  }
-
-
-  public static void main(String[] args) {
-    KnightBoard b = new KnightBoard(4,5);
-    System.out.println(b.solve(2,3));
-    System.out.println(b);
   }
 }
