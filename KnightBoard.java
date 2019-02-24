@@ -52,7 +52,7 @@ public class KnightBoard{
       throw new IllegalArgumentException();
     }
     //calls helper
-    return solveH(startingRow, startingCol, 0);
+    return solveH(startingRow, startingCol, 1);
   }
 
   //@throws IllegalStateException when the board contains non-zero values.
@@ -78,9 +78,71 @@ public class KnightBoard{
     return countSolutions(startingRow, startingCol, 0);
   }
 
-  public int countSolutions(int startingRow, int startingCol, int level){
+  //countSolutions Help
+  public int countSolutions(int row, int col, int level){
     //initialize variable
     int count = 0;
+    // if the # knights is equal to the number of squares on board, all knights have been placed
+    System.out.println(toString());
+    System.out.println("" + row + " " + col);
+    board[row][col] = -1;
+    if (level == (board.length * board[0].length)){
+      return 1;
+    }
+    // tests below start square
+    if (row < board.length - 3){
+      if (col < board[0].length - 1){
+        if (board[row + 2][col + 1] == 0){
+          count += countSolutions(row + 2, col + 1, level + 1);
+        }
+      }
+      if (col > 0){
+        if (board[row + 2][col - 1] == 0){
+          count += countSolutions(row + 2, col - 1, level + 1);
+        }
+      }
+    }
+    // tests above start square
+    if (row > 1){
+      if (col < board[0].length - 1){
+        if (board[row - 2][col + 1] == 0){
+          count += countSolutions(row - 2, col + 1, level + 1);
+        }
+      }
+      if (col > 0){
+        if (board[row - 2][col - 1] == 0){
+          count += countSolutions(row - 2, col - 1, level + 1);
+        }
+      }
+    }
+    //tests to the right of start square
+    if (col < board[0].length - 3){
+      if (row < board.length - 1){
+        if (board[row + 1][col + 2] == 0){
+          count += countSolutions(row + 1, col + 2, level + 1);
+        }
+      }
+      if (row > 0){
+        if (board[row - 1][col + 2] == 0){
+            count += countSolutions(row - 1, col + 2, level + 1);
+          }
+        }
+      }
+    //tests to the left of start square
+    if (col > 1){
+      if (row < board.length - 1){
+        if (board[row + 1][col - 2] == 0){
+          count += countSolutions(row + 1, col - 2, level + 1);
+        }
+      }
+      if (row > 0){
+        if (board[row - 1][col - 2] == 0){
+          count += countSolutions(row - 1, col - 2, level + 1);
+        }
+      }
+    }
+    board[row][col] = 0;
+    // if none of the possible squares are empty, then next knight can't be placed
     return count;
   }
 
@@ -145,6 +207,7 @@ public class KnightBoard{
         }
       }
     }
+    board[row][col] = 0;
     // if none of the possible squares are empty, then next knight can't be placed
     return false;
   }
