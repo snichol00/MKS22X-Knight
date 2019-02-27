@@ -148,13 +148,17 @@ public class KnightBoard{
 
   // level is the # of the knight
   private boolean solveH(int row ,int col, int level){
-    // if the # knights is equal to the number of squares on board, all knights have been placed
-    System.out.println(toString());
-    System.out.println("" + row + " " + col);
-    board[row][col] = -1;
-    if (level == board.length * board[0].length){
-
+    int count = 0;
+    int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, 2}, {-2, 1}, {-2, 1}, {-1, 2}, {-1, -2}};
+    for (int y = 0; y < board.length; y++){
+      board[row][col] = -1;
+      int newrow = moves[y][1];
+      int newcol = moves[y][0];
+      // if the # knights is equal to the number of squares on board, all knights have been placed
+      if (level == board.length * board[0].length){
+        count += solveH(newrow, newcol, level + 1);
+      }
     }
-    
+    return count;
   }
 }
