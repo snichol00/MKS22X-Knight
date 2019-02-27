@@ -55,6 +55,71 @@ public class KnightBoard{
     return solveH(startingRow, startingCol, 1);
   }
 
+  private boolean solveH(int row ,int col, int level){
+    // if the # knights is equal to the number of squares on board, all knights have been placed
+    System.out.println(toString());
+    System.out.println("" + row + " " + col);
+    board[row][col] = -1;
+    if (level == board.length * board[0].length){
+      return true;
+    }
+    // tests below start square
+    if (row < board.length - 3){
+      if (col < board[0].length - 1){
+        if (board[row + 2][col + 1] == 0){
+          return solveH(row + 2, col + 1, level + 1);
+        }
+      }
+      if (col > 0){
+        if (board[row + 2][col - 1] == 0){
+          return solveH(row + 2, col - 1, level + 1);
+        }
+      }
+    }
+    // tests above start square
+    if (row > 1){
+      if (col < board[0].length - 1){
+        if (board[row - 2][col + 1] == 0){
+          return solveH(row - 2, col + 1, level + 1);
+        }
+      }
+      if (col > 0){
+        if (board[row - 2][col - 1] == 0){
+          return solveH(row - 2, col - 1, level + 1);
+        }
+      }
+    }
+    //tests to the right of start square
+    if (col < board[0].length - 3){
+      if (row < board.length - 1){
+        if (board[row + 1][col + 2] == 0){
+          return solveH(row + 1, col + 2, level + 1);
+        }
+      }
+      if (col > 0){
+        if (board[row - 1][col + 2] == 0){
+            return solveH(row - 1, col + 2, level + 1);
+          }
+        }
+      }
+    //tests to the left of start square
+    if (col > 1){
+      if (row < board.length - 1){
+        if (board[row + 1][col - 2] == 0){
+          return solveH(row + 1, col - 2, level + 1);
+        }
+      }
+      if (col > 0){
+        if (board[row - 1][col - 2] == 0){
+          return solveH(row - 1, col - 2, level + 1);
+        }
+      }
+    }
+    board[row][col] = 0;
+    // if none of the possible squares are empty, then next knight can't be placed
+    return false;
+  }
+
   //@throws IllegalStateException when the board contains non-zero values.
   //@throws IllegalArgumentException when either parameter is negative or out of bounds.
   public int countSolutions(int startingRow, int startingCol){
@@ -78,87 +143,29 @@ public class KnightBoard{
     return countSolutions(startingRow, startingCol, 0);
   }
 
-  //countSolutions Help
-  public int countSolutions(int row, int col, int level){
-    //initialize variable
+  // level is the # of the knight
+  private int countSolutions(int row ,int col, int level){
+    //keeps track of solutions
     int count = 0;
+    //stores all possible knight moves
+    int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, 2}, {-2, 1}, {-2, 1}, {-1, 2}, {-1, -2}};
     // if the # knights is equal to the number of squares on board, all knights have been placed
-    System.out.println(toString());
-    System.out.println("" + row + " " + col);
-    board[row][col] = -1;
-    if (level == (board.length * board[0].length)){
+    if (level == board.length * board[0].length){
       return 1;
     }
-    // tests below start square
-    if (row < board.length - 3){
-      if (col < board[0].length - 1){
-        if (board[row + 2][col + 1] == 0){
-          count += countSolutions(row + 2, col + 1, level + 1);
-        }
-      }
-      if (col > 0){
-        if (board[row + 2][col - 1] == 0){
-          count += countSolutions(row + 2, col - 1, level + 1);
-        }
-      }
-    }
-    // tests above start square
-    if (row > 1){
-      if (col < board[0].length - 1){
-        if (board[row - 2][col + 1] == 0){
-          count += countSolutions(row - 2, col + 1, level + 1);
-        }
-      }
-      if (col > 0){
-        if (board[row - 2][col - 1] == 0){
-          count += countSolutions(row - 2, col - 1, level + 1);
-        }
-      }
-    }
-    //tests to the right of start square
-    if (col < board[0].length - 3){
-      if (row < board.length - 1){
-        if (board[row + 1][col + 2] == 0){
-          count += countSolutions(row + 1, col + 2, level + 1);
-        }
-      }
-      if (row > 0){
-        if (board[row - 1][col + 2] == 0){
-            count += countSolutions(row - 1, col + 2, level + 1);
-          }
-        }
-      }
-    //tests to the left of start square
-    if (col > 1){
-      if (row < board.length - 1){
-        if (board[row + 1][col - 2] == 0){
-          count += countSolutions(row + 1, col - 2, level + 1);
-        }
-      }
-      if (row > 0){
-        if (board[row - 1][col - 2] == 0){
-          count += countSolutions(row - 1, col - 2, level + 1);
-        }
-      }
-    }
-    board[row][col] = 0;
-    // if none of the possible squares are empty, then next knight can't be placed
-    return count;
-  }
-
-  // level is the # of the knight
-  private boolean solveH(int row ,int col, int level){
-    int count = 0;
-    int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, 2}, {-2, 1}, {-2, 1}, {-1, 2}, {-1, -2}};
+    //checks all possible knight moves at given location
     for (int y = 0; y < board.length; y++){
       board[row][col] = -1;
+      //stores where the knight ould go next
       int newrow = moves[y][1];
       int newcol = moves[y][0];
-      // if the # knights is equal to the number of squares on board, all knights have been placed
-      if (level == board.length * board[0].length){
-        count += solveH(newrow, newcol, level + 1);
+      //checks if it is in bounds
+      if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length){
+        count += countSolutions(newrow, newcol, level + 1);
       }
     }
+    //if knight can't be placed;
+    board[row][col] = 0;
     return count;
   }
 }
