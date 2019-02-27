@@ -113,7 +113,9 @@ public class KnightBoard{
         }
       }
     }
+    //clears piece
     board[row][col] = 0;
+    //resets optimizer board
     optimizer[row][col] = optVal;
     for (int move = 0; move < moves.length; move++){
       int newrow = row + possibleMoves.get(move);
@@ -126,9 +128,9 @@ public class KnightBoard{
 
   //gives all possible moves for a certain square
   private ArrayList<int> possibleMoves(int r, int c){
-    // will sort the maximum number of oves to the minimum
+    // will sort the maximum number of moves to the minimum
     ArrayList<Integer> numMoves = new ArrayList<Integer>();
-    // will store the row, col, and numMoves of all possible moves for r,c
+    // will store the row, col, and "place" in descending order from which has the most moves
           //will have to loop through by threes
     ArrayList<Integer> moveChoices = new ArrayList<Integer>();
     int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, -2}, {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}};
@@ -142,8 +144,10 @@ public class KnightBoard{
           Collections.sort(numMoves);
           //puts in reverse order
           Collections.reverse(numMoves);
+          moveChoices.add(numMoves.indexOf(optimizer[newrow][newcol]), moves[move]);
         }
       }
+      return moveChoices;
   }
 
 
