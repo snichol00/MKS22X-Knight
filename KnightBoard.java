@@ -20,18 +20,23 @@ public class KnightBoard{
       for (int x = 0; x < board[0].length; x++){
         //when there is no knight
         if (board[y][x] == 0){
-          output += " _";
+          output += "  _";
         }
         //where there is a knight
-        if (board[y][x] == -1){
-          output += " K";
+        else{
+          if (board[y][x] < 10){
+            output += "  " + board[y][x];
+          }
+          else{
+            output += " " + board[y][x];
+          }
         }
       }
       output += "\n";
     }
     return output;
   }
-  /*
+
   //@throws IllegalStateException when the board contains non-zero values.
   //@throws IllegalArgumentException when either parameter is negative or out of bounds.
   public boolean solve(int startingRow, int startingCol){
@@ -59,7 +64,7 @@ public class KnightBoard{
     // if the # knights is equal to the number of squares on board, all knights have been placed
     System.out.println(toString());
     System.out.println("" + row + " " + col);
-    board[row][col] = -1;
+    board[row][col] = level;
     if (level == board.length * board[0].length){
       return true;
     }
@@ -119,7 +124,7 @@ public class KnightBoard{
     // if none of the possible squares are empty, then next knight can't be placed
     return false;
   }
-*/
+
   //@throws IllegalStateException when the board contains non-zero values.
   //@throws IllegalArgumentException when either parameter is negative or out of bounds.
   public int countSolutions(int startingRow, int startingCol){
@@ -156,7 +161,7 @@ public class KnightBoard{
     //checks all possible knight moves at given location
     for (int y = 0; y < moves.length; y++){
       //System.out.println(toString());
-      board[row][col] = -1;
+      board[row][col] = level;
       //stores where the knight ould go next
       int newrow = row + moves[y][1];
       int newcol = col + moves[y][0];
