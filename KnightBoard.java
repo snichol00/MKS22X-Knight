@@ -1,3 +1,6 @@
+import java.util.Collections;
+import java.util.ArrayList;
+
 public class KnightBoard{
   private int[][] board;
   private int[][] optimizer;
@@ -86,6 +89,7 @@ public class KnightBoard{
   private boolean solveH(int row ,int col, int level){
     // if the # knights is equal to the number of squares on board, all knights have been placed
     board[row][col] = level;
+    int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, -2}, {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}};
     // stores old val
     int optVal = optimizer[row][col];
     optimizer[row][col] = -1;
@@ -102,13 +106,13 @@ public class KnightBoard{
         }
       }
     }
-    ArrayList<int> possibleMoves = possibleMoves(row, col);
+    ArrayList<Integer> possibleMoves = possibleMoves(row, col);
     for (int move = 0; move < possibleMoves.size(); move++){
       // stores would-be new vals
       int newrow = row + possibleMoves.get(move);
       int newcol = row + possibleMoves.get(move);
       if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
-        if solveH(newrow, newcol, level + 1){
+        if (solveH(newrow, newcol, level + 1)){
           return true;
         }
       }
@@ -117,17 +121,19 @@ public class KnightBoard{
     board[row][col] = 0;
     //resets optimizer board
     optimizer[row][col] = optVal;
-    for (int move = 0; move < moves.length; move++){
+    for (int move = 0; move < possibleMoves.size(); move++){
       int newrow = row + possibleMoves.get(move);
       int newcol = row + possibleMoves.get(move);
-      optimizer[newrow][newcol] += 1;
+      if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
+        optimizer[newrow][newcol] += 1;
+      }
     }
     // if none of the possible squares are empty, then next knight can't be placed
     return false;
   }
 
   //gives all possible moves for a certain square
-  private ArrayList<int> possibleMoves(int r, int c){
+  private ArrayList<Integer> possibleMoves(int r, int c){
     // will sort the maximum number of moves to the minimum
     ArrayList<Integer> numMoves = new ArrayList<Integer>();
     // will store the row, col, and "place" in descending order from which has the most moves
@@ -136,17 +142,19 @@ public class KnightBoard{
     int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, -2}, {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}};
     for (int move = 0; move < moves.length; move++){
       // stores would-be new vals
-      int newrow = startingRows + moves[move][1];
-      int newcol = startingCols + moves[move][0];
+      int newrow = r + moves[move][1];
+      int newcol = c + moves[move][0];
       if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
         if (optimizer[newrow][newcol] != -1){
           numMoves.add(optimizer[newrow][newcol]);
           Collections.sort(numMoves);
           //puts in reverse order
           Collections.reverse(numMoves);
-          moveChoices.add(numMoves.indexOf(optimizer[newrow][newcol]), moves[move]);
+          moveChoices.add(2 * numMoves.indexOf(optimizer[newrow][newcol]), moves[move][1]);
+          moveChoices.add(2 * numMoves.indexOf(optimizer[newrow][newcol]) + 1, moves[move][0]);
         }
       }
+    }
       return moveChoices;
   }
 
