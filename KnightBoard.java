@@ -94,15 +94,32 @@ public class KnightBoard{
     }
     for (int move = 0; move < moves.length; move++){
       // stores would-be new vals
-      int newrow = startingRows + moves[move][1];
-      int newcol = startingCols + moves[move][0];
+      int newrow = row + moves[move][1];
+      int newcol = row + moves[move][0];
       if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
         if (optimizer[newrow][newcol] > 0){
           optimizer[newrow][newcol] -= 1;
         }
       }
     }
+    ArrayList<int> possibleMoves = possibleMoves(row, col);
+    for (int move = 0; move < possibleMoves.size(); move++){
+      // stores would-be new vals
+      int newrow = row + possibleMoves.get(move);
+      int newcol = row + possibleMoves.get(move);
+      if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
+        if solveH(newrow, newcol, level + 1){
+          return true;
+        }
+      }
+    }
     board[row][col] = 0;
+    optimizer[row][col] = optVal;
+    for (int move = 0; move < moves.length; move++){
+      int newrow = row + possibleMoves.get(move);
+      int newcol = row + possibleMoves.get(move);
+      optimizer[newrow][newcol] += 1;
+    }
     // if none of the possible squares are empty, then next knight can't be placed
     return false;
   }
