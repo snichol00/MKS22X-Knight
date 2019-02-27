@@ -88,7 +88,7 @@ public class KnightBoard{
     board[row][col] = level;
     // stores old val
     int optVal = optimizer[row][col];
-    optimizer[row][col] = 0;
+    optimizer[row][col] = -1;
     if (level == board.length * board[0].length){
       return true;
     }
@@ -99,8 +99,18 @@ public class KnightBoard{
   }
 
   //gives all possible moves for a certain square
-  private int[][] possibleMoves(int r, int c){
-
+  private ArrayList<int> possibleMoves(int r, int c){
+    ArrayList<Integer> numMoves = new ArrayList<Integer>();
+    int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, -2}, {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}};
+    for (int move = 0; move < moves.length; move++){
+      // stores would-be new vals
+      int newrow = startingRows + moves[move][1];
+      int newcol = startingCols + moves[move][0];
+      if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
+        if (optimizer[newrow][newcol] != -1){
+          numMoves.add(optimizer[newrow][newcol]);
+        }
+      }
   }
 
 
