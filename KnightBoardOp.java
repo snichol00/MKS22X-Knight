@@ -1,15 +1,41 @@
+import java.util.Collections;
+import java.util.ArrayList;
+
 public class KnightBoard{
   private int[][] board;
+  private int[][] optimizer;
 
   //@throws IllegalArgumentException when either parameter is negative.
   //Initialize the board to the correct size and make them all 0's
   public KnightBoard(int startingRows,int startingCols){
-    // -1 on board means there is a knight, 0 means empty
+    if (startingRows < 0 || startingCols < 0){
+      throw new IllegalArgumentException();
+    }
+    // 0 means empty, >0 means knight, fills board with zeroes
     board = new int[startingRows][startingCols];
     for (int y = 0; y < startingRows; y++){
       for (int x = 0; x < startingCols; x++){
         //clears board
         board[y][x] = 0;
+      }
+    }
+    optimizer = new int[startingRows][startingCols];
+    // all knight moves
+    int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, -2}, {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}};
+    // optimized board shows # possible moves
+    for (int y = 0; y < startingRows; y++){
+      for (int x = 0; x < startingCols; x++){
+        int numMoves = 0;
+        for (int move = 0; move < moves.length; move++){
+          // stores would-be new vals
+          int newrow = startingRows + moves[move][1];
+          int newcol = startingCols + moves[move][0];
+          //checks if it is in bounds
+          if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
+            numMoves ++;
+          }
+        }
+        optimizer[y][x] = numMoves;
       }
     }
   }
@@ -62,68 +88,76 @@ public class KnightBoard{
 
   private boolean solveH(int row ,int col, int level){
     // if the # knights is equal to the number of squares on board, all knights have been placed
-    System.out.println(toString());
-    System.out.println("" + row + " " + col);
     board[row][col] = level;
+    int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, -2}, {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}};
+    // stores old val
+    int optVal = optimizer[row][col];
+    optimizer[row][col] = -1;
     if (level == board.length * board[0].length){
       return true;
     }
-    // tests below start square
-    if (row < board.length - 3){
-      if (col < board[0].length - 1){
-        if (board[row + 2][col + 1] == 0){
-          return solveH(row + 2, col + 1, level + 1);
-        }
-      }
-      if (col > 0){
-        if (board[row + 2][col - 1] == 0){
-          return solveH(row + 2, col - 1, level + 1);
+    for (int move = 0; move < moves.length; move++){
+      // stores would-be new vals
+      int newrow = row + moves[move][1];
+      int newcol = col + moves[move][0];
+      if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
+        if (optimizer[newrow][newcol] >= 0){
+          optimizer[newrow][newcol] -= 1;
         }
       }
     }
-    // tests above start square
-    if (row > 1){
-      if (col < board[0].length - 1){
-        if (board[row - 2][col + 1] == 0){
-          return solveH(row - 2, col + 1, level + 1);
-        }
-      }
-      if (col > 0){
-        if (board[row - 2][col - 1] == 0){
-          return solveH(row - 2, col - 1, level + 1);
-        }
-      }
-    }
-    //tests to the right of start square
-    if (col < board[0].length - 3){
-      if (row < board.length - 1){
-        if (board[row + 1][col + 2] == 0){
-          return solveH(row + 1, col + 2, level + 1);
-        }
-      }
-      if (col > 0){
-        if (board[row - 1][col + 2] == 0){
-            return solveH(row - 1, col + 2, level + 1);
-          }
-        }
-      }
-    //tests to the left of start square
-    if (col > 1){
-      if (row < board.length - 1){
-        if (board[row + 1][col - 2] == 0){
-          return solveH(row + 1, col - 2, level + 1);
-        }
-      }
-      if (col > 0){
-        if (board[row - 1][col - 2] == 0){
-          return solveH(row - 1, col - 2, level + 1);
+    ArrayList<Integer> possibleMoves = possibleMoves(row, col);
+    for (int move = 0; (move * 2 + 1) < possibleMoves.size(); move++){
+      // stores would-be new vals
+      int newrow = row + possibleMoves.get(move*2);
+      int newcol = col + possibleMoves.get(move*2 + 1);
+      if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
+        if (solveH(newrow, newcol, level + 1)){
+          return true;
         }
       }
     }
+    //clears piece
     board[row][col] = 0;
+    //resets optimizer board
+    optimizer[row][col] = optVal;
+    for (int move = 0; (move * 2 + 1) < possibleMoves.size(); move++){
+      int newrow = row + possibleMoves.get(move*2);
+      int newcol = col + possibleMoves.get(move*2 + 1);
+      if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
+        optimizer[newrow][newcol] += 1;
+      }
+    }
     // if none of the possible squares are empty, then next knight can't be placed
     return false;
   }
+
+  //gives all possible moves for a certain square
+  private ArrayList<Integer> possibleMoves(int r, int c){
+    // will sort the maximum number of moves to the minimum
+    ArrayList<Integer> numMoves = new ArrayList<Integer>();
+    // will store the row, col, and "place" in descending order from which has the most moves
+          //will have to loop through by threes
+    ArrayList<Integer> moveChoices = new ArrayList<Integer>();
+    int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, -2}, {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}};
+    for (int move = 0; move < moves.length; move++){
+      // stores would-be new vals
+      int newrow = r + moves[move][1];
+      int newcol = c + moves[move][0];
+      if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
+        if (optimizer[newrow][newcol] != -1){
+          numMoves.add(optimizer[newrow][newcol]);
+          Collections.sort(numMoves);
+          //puts in reverse order
+          Collections.reverse(numMoves);
+          moveChoices.add(2 * numMoves.indexOf(optimizer[newrow][newcol]), moves[move][1]);
+          moveChoices.add(2 * numMoves.indexOf(optimizer[newrow][newcol]) + 1, moves[move][0]);
+        }
+      }
+    }
+      return moveChoices;
+  }
+
 
   //@throws IllegalStateException when the board contains non-zero values.
   //@throws IllegalArgumentException when either parameter is negative or out of bounds.
