@@ -1,15 +1,38 @@
 public class KnightBoard{
   private int[][] board;
+  private int[][] optimizer;
 
   //@throws IllegalArgumentException when either parameter is negative.
   //Initialize the board to the correct size and make them all 0's
   public KnightBoard(int startingRows,int startingCols){
-    // -1 on board means there is a knight, 0 means empty
+    if (startingRows < 0 || startingCols < 0){
+      throw new IllegalArgumentException();
+    }
+    // 0 means empty, >0 means knight, fills board with zeroes
     board = new int[startingRows][startingCols];
     for (int y = 0; y < startingRows; y++){
       for (int x = 0; x < startingCols; x++){
         //clears board
         board[y][x] = 0;
+      }
+    }
+    optimizer = new int[startingRows][startingCols];
+    // all knight moves
+    int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, -2}, {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}};
+    // optimized board shows # possible moves
+    for (int y = 0; y < startingRows; y++){
+      for (int x = 0; x < startingCols; x++){
+        int numMoves = 0;
+        for (int move = 0; move < moves.length; move++){
+          // stores would-be new vals
+          int newrow = startingRows + moves[move][1];
+          int newcol = startingCols + moves[move][0];
+          //checks if it is in bounds
+          if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
+            numMoves ++;
+          }
+        }
+        optimizer[y][x] = numMoves;
       }
     }
   }
