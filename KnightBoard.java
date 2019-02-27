@@ -99,7 +99,7 @@ public class KnightBoard{
     for (int move = 0; move < moves.length; move++){
       // stores would-be new vals
       int newrow = row + moves[move][1];
-      int newcol = row + moves[move][0];
+      int newcol = col + moves[move][0];
       if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
         if (optimizer[newrow][newcol] > 0){
           optimizer[newrow][newcol] -= 1;
@@ -107,10 +107,10 @@ public class KnightBoard{
       }
     }
     ArrayList<Integer> possibleMoves = possibleMoves(row, col);
-    for (int move = 0; move < possibleMoves.size(); move++){
+    for (int move = 0; (move * 2 + 1) < possibleMoves.size(); move++){
       // stores would-be new vals
-      int newrow = row + possibleMoves.get(move);
-      int newcol = row + possibleMoves.get(move);
+      int newrow = row + possibleMoves.get(move*2);
+      int newcol = col + possibleMoves.get(move*2 + 1);
       if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
         if (solveH(newrow, newcol, level + 1)){
           return true;
@@ -121,9 +121,9 @@ public class KnightBoard{
     board[row][col] = 0;
     //resets optimizer board
     optimizer[row][col] = optVal;
-    for (int move = 0; move < possibleMoves.size(); move++){
-      int newrow = row + possibleMoves.get(move);
-      int newcol = row + possibleMoves.get(move);
+    for (int move = 0; (move * 2 + 1) < possibleMoves.size(); move++){
+      int newrow = row + possibleMoves.get(move*2);
+      int newcol = col + possibleMoves.get(move*2 + 1);
       if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
         optimizer[newrow][newcol] += 1;
       }
