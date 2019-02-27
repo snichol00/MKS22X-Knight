@@ -92,7 +92,16 @@ public class KnightBoard{
     if (level == board.length * board[0].length){
       return true;
     }
-
+    for (int move = 0; move < moves.length; move++){
+      // stores would-be new vals
+      int newrow = startingRows + moves[move][1];
+      int newcol = startingCols + moves[move][0];
+      if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
+        if (optimizer[newrow][newcol] > 0){
+          optimizer[newrow][newcol] -= 1;
+        }
+      }
+    }
     board[row][col] = 0;
     // if none of the possible squares are empty, then next knight can't be placed
     return false;
@@ -100,7 +109,11 @@ public class KnightBoard{
 
   //gives all possible moves for a certain square
   private ArrayList<int> possibleMoves(int r, int c){
+    // will sort the maximum number of oves to the minimum
     ArrayList<Integer> numMoves = new ArrayList<Integer>();
+    // will store the row, col, and numMoves of all possible moves for r,c
+          //will have to loop through by threes
+    ArrayList<Integer> moveChoices = new ArrayList<Integer>();
     int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, -2}, {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}};
     for (int move = 0; move < moves.length; move++){
       // stores would-be new vals
@@ -109,6 +122,9 @@ public class KnightBoard{
       if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
         if (optimizer[newrow][newcol] != -1){
           numMoves.add(optimizer[newrow][newcol]);
+          Collections.sort(numMoves);
+          //puts in reverse order
+          Collections.reverse(numMoves);
         }
       }
   }
