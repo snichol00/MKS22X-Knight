@@ -31,7 +31,7 @@ public class KnightBoard{
     }
     return output;
   }
-
+  /*
   //@throws IllegalStateException when the board contains non-zero values.
   //@throws IllegalArgumentException when either parameter is negative or out of bounds.
   public boolean solve(int startingRow, int startingCol){
@@ -119,7 +119,7 @@ public class KnightBoard{
     // if none of the possible squares are empty, then next knight can't be placed
     return false;
   }
-
+*/
   //@throws IllegalStateException when the board contains non-zero values.
   //@throws IllegalArgumentException when either parameter is negative or out of bounds.
   public int countSolutions(int startingRow, int startingCol){
@@ -140,7 +140,7 @@ public class KnightBoard{
       throw new IllegalArgumentException();
     }
     // calls helper
-    return countSolutions(startingRow, startingCol, 0);
+    return countSolutions(startingRow, startingCol, 1);
   }
 
   // level is the # of the knight
@@ -148,19 +148,20 @@ public class KnightBoard{
     //keeps track of solutions
     int count = 0;
     //stores all possible knight moves
-    int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, 2}, {-2, 1}, {-2, 1}, {-1, 2}, {-1, -2}};
+    int[][] moves = {{2, 1}, {2, -1}, {1, 2}, {1, -2}, {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}};
     // if the # knights is equal to the number of squares on board, all knights have been placed
     if (level == board.length * board[0].length){
       return 1;
     }
     //checks all possible knight moves at given location
-    for (int y = 0; y < board.length; y++){
+    for (int y = 0; y < moves.length; y++){
+      //System.out.println(toString());
       board[row][col] = -1;
       //stores where the knight ould go next
-      int newrow = moves[y][1];
-      int newcol = moves[y][0];
+      int newrow = row + moves[y][1];
+      int newcol = col + moves[y][0];
       //checks if it is in bounds
-      if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length){
+      if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
         count += countSolutions(newrow, newcol, level + 1);
       }
     }
