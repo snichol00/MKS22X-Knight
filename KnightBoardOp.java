@@ -1,13 +1,13 @@
 import java.util.Collections;
 import java.util.ArrayList;
 
-public class KnightBoard{
+public class KnightBoardOp{
   private int[][] board;
   private int[][] optimizer;
 
   //@throws IllegalArgumentException when either parameter is negative.
   //Initialize the board to the correct size and make them all 0's
-  public KnightBoard(int startingRows,int startingCols){
+  public KnightBoardOp(int startingRows,int startingCols){
     if (startingRows < 0 || startingCols < 0){
       throw new IllegalArgumentException();
     }
@@ -149,7 +149,6 @@ public class KnightBoard{
           numMoves.add(optimizer[newrow][newcol]);
           Collections.sort(numMoves);
           //puts in reverse order
-          Collections.reverse(numMoves);
           moveChoices.add(2 * numMoves.indexOf(optimizer[newrow][newcol]), moves[move][1]);
           moveChoices.add(2 * numMoves.indexOf(optimizer[newrow][newcol]) + 1, moves[move][0]);
         }
