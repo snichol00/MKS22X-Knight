@@ -85,68 +85,24 @@ public class KnightBoard{
 
   private boolean solveH(int row ,int col, int level){
     // if the # knights is equal to the number of squares on board, all knights have been placed
-    System.out.println(toString());
-    System.out.println("" + row + " " + col);
     board[row][col] = level;
+    // stores old val
+    int optVal = optimizer[row][col];
+    optimizer[row][col] = 0;
     if (level == board.length * board[0].length){
       return true;
     }
-    // tests below start square
-    if (row < board.length - 3){
-      if (col < board[0].length - 1){
-        if (board[row + 2][col + 1] == 0){
-          return solveH(row + 2, col + 1, level + 1);
-        }
-      }
-      if (col > 0){
-        if (board[row + 2][col - 1] == 0){
-          return solveH(row + 2, col - 1, level + 1);
-        }
-      }
-    }
-    // tests above start square
-    if (row > 1){
-      if (col < board[0].length - 1){
-        if (board[row - 2][col + 1] == 0){
-          return solveH(row - 2, col + 1, level + 1);
-        }
-      }
-      if (col > 0){
-        if (board[row - 2][col - 1] == 0){
-          return solveH(row - 2, col - 1, level + 1);
-        }
-      }
-    }
-    //tests to the right of start square
-    if (col < board[0].length - 3){
-      if (row < board.length - 1){
-        if (board[row + 1][col + 2] == 0){
-          return solveH(row + 1, col + 2, level + 1);
-        }
-      }
-      if (col > 0){
-        if (board[row - 1][col + 2] == 0){
-            return solveH(row - 1, col + 2, level + 1);
-          }
-        }
-      }
-    //tests to the left of start square
-    if (col > 1){
-      if (row < board.length - 1){
-        if (board[row + 1][col - 2] == 0){
-          return solveH(row + 1, col - 2, level + 1);
-        }
-      }
-      if (col > 0){
-        if (board[row - 1][col - 2] == 0){
-          return solveH(row - 1, col - 2, level + 1);
-        }
-      }
-    }
+
     board[row][col] = 0;
     // if none of the possible squares are empty, then next knight can't be placed
     return false;
   }
+
+  //gives all possible moves for a certain square
+  private int[][] possibleMoves(int r, int c){
+
+  }
+
 
   //@throws IllegalStateException when the board contains non-zero values.
   //@throws IllegalArgumentException when either parameter is negative or out of bounds.
