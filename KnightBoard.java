@@ -79,7 +79,7 @@ public class KnightBoard{
       int newcol = col + moves[y][0];
       //checks if it is in bounds
       if (newrow >= 0 && newrow < board.length && newcol >= 0 && newcol < board[0].length && board[newrow][newcol] == 0){
-        if(solveH(r, c, level + 1)){
+        if(solveH(row, col, level + 1)){
           return true;
         }
       }
